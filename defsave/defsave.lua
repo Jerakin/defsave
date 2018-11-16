@@ -221,9 +221,8 @@ function M.key_exists(file, key)
 		if M.loaded[file].data[key] ~= nil then
 			return true
 		end
-	else
-		return false
 	end
+	return false
 end
 
 function M.isset(file, key)
