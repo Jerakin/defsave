@@ -93,6 +93,24 @@ function M.get_file_path(file)
 	return sys.get_save_file(M.appname, file)
 end
 
+function M.file_exists(file)
+	if file == nil then 
+		print("DefSave: Warning no file specified when attempting to check if it exists")
+		return nil
+	end
+	local path = M.get_file_path(file)
+	if path == nil then
+		print("DefSave: Warning path returned when attempting to check if it exists is nil")
+		return nil
+	end
+	
+	local loaded_file = sys.load(path)
+	if next(loaded_file) == nil then
+		return false
+	end
+	return true
+end
+
 function M.load(file)
 
 	if file == nil then 
