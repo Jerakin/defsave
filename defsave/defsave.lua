@@ -35,7 +35,7 @@ function M.obfuscate(input, key)
 	key = key or M.obfuscation_key
 	local output = ""
 	local key_iterator = 1
-	
+
 	local input_length = #input
 	local key_length = #key
 	
@@ -46,34 +46,34 @@ function M.obfuscate(input, key)
 		output = output .. string.char(bit.bxor( character , key_byte))
 
 		key_iterator = key_iterator + 1
-		
+
 	end
 	return output
 end
 
 
 local function clone(t) -- deep-copy a table
-    if type(t) ~= "table" then return t end
-    local meta = getmetatable(t)
-    local target = {}
-    for k, v in pairs(t) do
-        if type(v) == "table" then
-            target[k] = clone(v)
-        else
-            target[k] = v
-        end
-    end
-    setmetatable(target, meta)
-    return target
+	if type(t) ~= "table" then return t end
+	local meta = getmetatable(t)
+	local target = {}
+	for k, v in pairs(t) do
+		if type(v) == "table" then
+			target[k] = clone(v)
+		else
+			target[k] = v
+		end
+	end
+	setmetatable(target, meta)
+	return target
 end
 
 local function copy(t) -- shallow-copy a table
-    if type(t) ~= "table" then return t end
-    local meta = getmetatable(t)
-    local target = {}
-    for k, v in pairs(t) do target[k] = v end
-    setmetatable(target, meta)
-    return target
+	if type(t) ~= "table" then return t end
+	local meta = getmetatable(t)
+	local target = {}
+	for k, v in pairs(t) do target[k] = v end
+	setmetatable(target, meta)
+	return target
 end
 
 
@@ -103,7 +103,7 @@ function M.file_exists(file)
 		print("DefSave: Warning path returned when attempting to check if it exists is nil")
 		return nil
 	end
-	
+
 	local loaded_file = sys.load(path)
 	if next(loaded_file) == nil then
 		return false
@@ -117,14 +117,14 @@ function M.load(file)
 		print("DefSave: Warning no file specified when attempting to load")
 		return nil
 	end
-	
-	local path = M.get_file_path(file)	
-	
+
+	local path = M.get_file_path(file)
+
 	if path == nil then
 		print("DefSave: Warning path returned when attempting to load is nil")
 		return nil
 	end
-	
+
 	if M.loaded[file] ~= nil then
 		if M.block_reloading == false then
 			print("DefSave: Warning the file " .. file .. " was already loaded and will be reloaded possibly overwriting changes")
@@ -133,42 +133,40 @@ function M.load(file)
 			return true
 		end
 	end
-	
+
 	local loaded_file = sys.load(path)
 	
 	local empty = false
-	
-	
+
 	if next(loaded_file) == nil then
 		if M.verbose then print("DefSave: Loaded file '" .. file .. "' is empty") end
 		empty = true
 	end
-	
+
 	if M.use_default_data and empty then 
 		if (M.reset_to_default(file)) then
 			return true
 		else
 			return false
 		end
-		
+
 	elseif empty then
 		print("DefSave: The " .. file .. " is loaded but it was empty")
 		M.loaded[file] = {}
 		M.loaded[file].changed = true
 		M.changed = true
 		M.loaded[file].data = {}
-		return true		
+		return true
 	end
-	
 
 	M.loaded[file] = {}
 	M.loaded[file].changed = false
 	M.loaded[file].data = loaded_file
 	
 	if M.verbose then  print("DefSave: The file '" .. file .. "' was successfully loaded") end
-	
+
 	return true
-	
+
 end
 
 function M.save(file, force)
@@ -178,15 +176,14 @@ function M.save(file, force)
 		print("DefSave: Warning attempt to save a file which could not be found in loaded list")
 		return nil
 	end
-	
+
 	if M.loaded[file].changed == false and force == false then
 		if M.verbose then  print("DefSave: File '" .. file .. "' is unchanged so not saving, set force flag to true to force saving if changed flag is false") end
 		return true
 	end
-	
+
 	local path = M.get_file_path(file)
-	
-	
+
 	if sys.save(path, M.loaded[file].data) then
 		if M.verbose then print("DefSave: File '" .. tostring(file) .. "' has been saved to the path '" .. path .. "'") end
 		M.loaded[file].changed = false
@@ -202,7 +199,7 @@ function M.save_all(force)
 	force = force or false
 	for key, value in pairs(M.loaded) do
 		M.save(key, force)
-		M.changed = false		
+		M.changed = false
 	end
 end
 
@@ -282,8 +279,7 @@ function M.update(dt)
 			print("DefSave: You must pass dt to defsave.update")
 		end
 		M.timer = M.timer + dt
-		
-		
+
 		if M.timer >= M.autosave_timer then
 			if M.changed == true then
 				M.save_all()
