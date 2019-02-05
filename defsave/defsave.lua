@@ -127,8 +127,8 @@ function M.load(file)
 
 	if M.loaded[file] ~= nil then
 		if M.block_reloading == false then
-			print("DefSave: Warning the file " .. file .. " was already loaded and
-				will be reloaded possibly overwriting changes")
+			print("DefSave: Warning the file " .. file .. " was already loaded and" ..
+			"will be reloaded possibly overwriting changes")
 		else
 			print("DefSave: Warning attempt to reload already file has been blocked")
 			return true
@@ -180,8 +180,8 @@ function M.save(file, force)
 
 	if M.loaded[file].changed == false and force == false then
 		if M.verbose then 
-			print("DefSave: File '" .. file .. "' is unchanged so not saving, set force flag to true 
-				to force saving if changed flag is false")
+			print("DefSave: File '" .. file .. "' is unchanged so not saving, set force flag to true " ..
+			"to force saving if changed flag is false")
 		end
 		return true
 	end
