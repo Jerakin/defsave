@@ -127,7 +127,8 @@ function M.load(file)
 
 	if M.loaded[file] ~= nil then
 		if M.block_reloading == false then
-			print("DefSave: Warning the file " .. file .. " was already loaded and will be reloaded possibly overwriting changes")
+			print("DefSave: Warning the file " .. file .. " was already loaded and
+				will be reloaded possibly overwriting changes")
 		else
 			print("DefSave: Warning attempt to reload already file has been blocked")
 			return true
@@ -178,18 +179,24 @@ function M.save(file, force)
 	end
 
 	if M.loaded[file].changed == false and force == false then
-		if M.verbose then  print("DefSave: File '" .. file .. "' is unchanged so not saving, set force flag to true to force saving if changed flag is false") end
+		if M.verbose then 
+			print("DefSave: File '" .. file .. "' is unchanged so not saving, set force flag to true 
+				to force saving if changed flag is false")
+		end
 		return true
 	end
 
 	local path = M.get_file_path(file)
 
 	if sys.save(path, M.loaded[file].data) then
-		if M.verbose then print("DefSave: File '" .. tostring(file) .. "' has been saved to the path '" .. path .. "'") end
+		if M.verbose then
+			print("DefSave: File '" .. tostring(file) .. "' has been saved to the path '" .. path .. "'")
+		end
 		M.loaded[file].changed = false
 		return true
 	else
-		print("DefSave: Something went wrong when attempting to save the file '" .. tostring(file) .. "' to the path '" .. path .. "'")
+		print("DefSave: Something went wrong when attempting to save the file '" .. tostring(file) .. 
+			"' to the path '" .. path .. "'")
 		return nil
 	end
 end
@@ -212,21 +219,24 @@ function M.get(file, key)
 			return {}
 		end
 	else
-		print("DefSave: Warning when attempting to get a key '" .. key .. "' the file '" .. tostring(file) .. "' could not be found in loaded list")
+		print("DefSave: Warning when attempting to get a key '" .. key .. "' the file '" .. tostring(file) ..
+			"' could not be found in loaded list")
 		return nil
 	end
 end
 
 function M.set(file, key, value)
 	if M.loaded[file] ~= nil then
-		-- we could check here to see if values are the same or not to set the changed flags or not but would require deep table compare loop
+		-- we could check here to see if values are the same or not to set the changed flags or not but would
+		-- require deep table compare loop
 		value = clone(value) -- decouple from original table if value is a table
 		M.loaded[file].data[key] = value
 		M.loaded[file].changed = true
 		M.changed = true
 		return true
 	else
-		print("DefSave: Warning when attempting to set a key '" .. key .. "' the file '" .. tostring(file) .. "' could not be found in loaded list")
+		print("DefSave: Warning when attempting to set a key '" .. key .. "' the file '" .. tostring(file) ..
+			"' could not be found in loaded list")
 		return nil
 	end
 end
