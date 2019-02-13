@@ -38,7 +38,7 @@ function M.obfuscate(input, key)
 
 	local input_length = #input
 	local key_length = #key
-	
+
 	for i=1, input_length do
 		local character = string.byte(input:sub(i,i))
 		if key_iterator >= key_length + 1 then key_iterator = 1 end -- cycle
@@ -136,7 +136,7 @@ function M.load(file)
 	end
 
 	local loaded_file = sys.load(path)
-	
+
 	local empty = false
 
 	if next(loaded_file) == nil then
@@ -163,7 +163,7 @@ function M.load(file)
 	M.loaded[file] = {}
 	M.loaded[file].changed = false
 	M.loaded[file].data = loaded_file
-	
+
 	if M.verbose then  print("DefSave: The file '" .. file .. "' was successfully loaded") end
 
 	return true
@@ -196,7 +196,7 @@ function M.save(file, force)
 		return true
 	else
 		print("DefSave: Something went wrong when attempting to save the file '" .. tostring(file) .. 
-			"' to the path '" .. path .. "'")
+		"' to the path '" .. path .. "'")
 		return nil
 	end
 end
@@ -220,7 +220,7 @@ function M.get(file, key)
 		end
 	else
 		print("DefSave: Warning when attempting to get a key '" .. key .. "' the file '" .. tostring(file) ..
-			"' could not be found in loaded list")
+		"' could not be found in loaded list")
 		return nil
 	end
 end
@@ -236,7 +236,7 @@ function M.set(file, key, value)
 		return true
 	else
 		print("DefSave: Warning when attempting to set a key '" .. key .. "' the file '" .. tostring(file) ..
-			"' could not be found in loaded list")
+		"' could not be found in loaded list")
 		return nil
 	end
 end
@@ -281,6 +281,20 @@ function M.is_loaded(file)
 	end
 end
 
+
+function M.delete(file)
+	if M.file_exists(file) then
+		local path = M.get_file_path(file)
+		local d = os.remove(path)
+		if M.verbose then
+			if d then
+				print("DefSave: File '" .. tostring(file) .. "' has been deleted")
+			else
+				print("DefSave: Could not delete file '" .. tostring(file))
+			end
+		end
+	end
+end
 
 
 function M.update(dt)
